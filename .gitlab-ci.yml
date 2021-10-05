@@ -1,0 +1,63 @@
+# Gitlab CI File 
+image: your image here
+stages:
+  - regression_test
+  - report
+
+Login-into-workplace:
+  stage: regression_test
+  script:
+    - echo "the project directory is - $CI_PROJECT_DIR"
+    - npm install
+    - npm run clean-reports
+    - npm rum mkdir
+    - npx cypress run --env TAGS='@e2e-test' --spec 'cypress/path to your feature file.feature'
+    #- node cypress/support/hook.js
+  timeout: 10m
+  artifacts:
+    expire_in: 2 hrs
+    when: always
+    paths:
+      - cypress/reports/
+      - cypress/screenshots/
+      - cypress/videos/
+      #- test-results
+      - Result-json
+Login-into-workplace1:
+  stage: regression_test
+  script:
+    - echo "the project directory is - $CI_PROJECT_DIR"
+    - npm install
+    - npm run clean-reports
+    - npm rum mkdir
+    - npx cypress run --env TAGS='@e2e-test' --spec 'cypress/path to your feature file.feature'
+   # - node cypress/support/hook.js
+  timeout: 10m
+  artifacts:
+    expire_in: 2 hrs
+    when: always
+    paths:
+      - cypress/reports/
+      - cypress/screenshots/
+      - cypress/videos/
+      #- test-results
+      - Result-json
+merged-report:
+  stage: report
+  when: always
+  script:
+    - node cypress/support/hook.js
+    - echo "the project directory is - $CI_PROJECT_DIR"
+  timeout: 10 m
+  artifacts:
+    expire_in: 1 week
+    when: always
+    paths:
+      - cypress/reports/
+      - cypress/screenshots/
+      - cypress/videos/
+      - test-results
+      #- Result-json
+#RPSCypressAutomation: *test_template
+#after_script:
+#  - npm run after:tests
